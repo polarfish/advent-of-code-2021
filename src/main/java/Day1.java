@@ -1,5 +1,4 @@
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.Arrays;
 
 public class Day1 extends Day {
 
@@ -22,49 +21,43 @@ public class Day1 extends Day {
 
     @Override
     public String part1(String input) {
+        int[] values = Arrays.stream(input.split("\n")).mapToInt(Integer::parseInt).toArray();
 
-        Integer prev = null;
-        int timesIncreased = 0;
-
-        for (String line : input.split("\n")) {
-            int current = Integer.parseInt(line);
-
-            if (prev != null && current > prev) {
-                timesIncreased++;
+        int prev = Integer.MAX_VALUE;
+        int result = 0;
+        for (int current : values) {
+            if (current > prev) {
+                result++;
             }
 
             prev = current;
         }
 
-        return String.valueOf(timesIncreased);
+        return String.valueOf(result);
     }
 
     @Override
     public String part2(String input) {
-        Deque<Integer> queue = new LinkedList<>();
+        int[] values = Arrays.stream(input.split("\n")).mapToInt(Integer::parseInt).toArray();
+
         int prev;
         int current = 0;
-        int windowSize = 0;
-        int timesIncreased = 0;
-        for (String line : input.split("\n")) {
-            int next = Integer.parseInt(line);
-
+        int result = 0;
+        for (int i = 0; i < values.length; i++) {
             prev = current;
-            current += next;
-            queue.push(next);
+            current += values[i];
 
-            if (windowSize < 3) {
-                windowSize++;
+            if (i < 3) {
                 continue;
             }
 
-            current -= queue.removeLast();
+            current -= values[i - 3];
 
             if (current > prev) {
-                timesIncreased++;
+                result++;
             }
         }
 
-        return String.valueOf(timesIncreased);
+        return String.valueOf(result);
     }
 }
